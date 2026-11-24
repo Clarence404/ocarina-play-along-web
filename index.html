@@ -235,7 +235,7 @@ body.folded .wrap { padding-top: 0; }
   header.top { padding: 6px 0 0; }
   header.top h1 { font-size: 14px; }
   header.top p { display: none; }
-  .dock { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 8px; padding: 4px 0; align-items: stretch; }
+  .dock { display: block; padding: 4px 0; }   /* 手机横屏也上下排：播放器在上，「现在吹」在下，占满整宽 */
   .player { padding: 6px 8px; }
   .row { gap: 6px; }
   .play { width: 36px; height: 36px; }
@@ -250,7 +250,7 @@ body.folded .wrap { padding-top: 0; }
   .opts summary { display: list-item; cursor: pointer; color: var(--muted); }
   .opts[open] { display: flex; flex-wrap: wrap; gap: 4px 10px; }
   .opts[open] summary { flex-basis: 100%; }
-  .now { margin-top: 0; height: auto; min-height: 0; padding: 6px 8px; gap: 8px; }
+  .now { margin-top: 6px; height: 118px; min-height: 0; padding: 6px 8px; gap: 8px; }
   .now .cur svg { width: 44px; height: 55px; }
   .now .nx svg { width: 24px; height: 30px; }
   .now .curname { font-size: 22px; }
@@ -260,7 +260,7 @@ body.folded .wrap { padding-top: 0; }
   .pc .fg { height: 30px; }
   .pc.tie::before { --tie-top: 32px; }
   .pc .dg { font-size: 20px; }
-  .sec { scroll-margin-top: 150px; padding: 8px 8px 10px; }
+  .sec { scroll-margin-top: 240px; padding: 8px 8px 10px; }
 }
 </style>
 </head>
