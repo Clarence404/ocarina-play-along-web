@@ -167,6 +167,9 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .pmark::before, .pmark::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
 .sec .pmark { margin: 0; }
 .pc { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: 6px; padding: 2px 0 3px; position: relative; min-width: 0; }
+/* 有歌词时每个音至少容得下一个汉字，短音（十六分音符）的字不会叠在一起；带指法的那一行本来就更宽 */
+body.has-ly .vl.nofing .pc { min-width: 19px; }
+body.has-ly .vl.ghost .pc { min-width: 15px; }
 .pc .fg { height: 44px; display: flex; align-items: flex-end; justify-content: center; }
 .vl.nofing .pc .fg, .vl.ghost .pc .fg { display: none; }
 .pc .hd { height: 9px; font-size: 14px; line-height: 6px; text-align: center; }
