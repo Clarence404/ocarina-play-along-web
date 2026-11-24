@@ -91,49 +91,22 @@ body.is-fs header.top { padding-top: 8px; }
 .seg button { border: none; background: transparent; padding: 5px 12px; cursor: pointer; }
 .seg button.on { background: var(--accent); color: #fff; }
 
-/* now strip */
-.now { margin-top: 8px; display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; box-shadow: var(--shadow); height: 196px; overflow: hidden; }
-/* 高度固定：在"音符/休止"之间切换时不会把下面的谱子顶上顶下 */
-.now .cur { display: flex; align-items: center; gap: 6px; flex: none; }
-.now .curname { font-size: 34px; font-weight: 700; line-height: 1; min-width: 34px; text-align: center; position: relative; }
-.now .curname small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 6px; }
-/* 右边两行：上 = 当前行（带指法、高亮走动），下 = 下一行（小字、淡色） */
-.now .curbox { flex: none; display: flex; align-items: center; min-width: 72px; max-width: 120px; }
-.now .lines { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 4px; overflow: hidden; border-left: 1px solid var(--line); padding-left: 8px; }
-.now .lrow { display: flex; gap: 6px; align-items: flex-end; overflow: hidden; white-space: nowrap; }
-.now .lrow.next { opacity: .5; font-size: 12px; min-height: 22px; }
-.now .lrow.next .nfg { display: none; }
-.now .lines.enter .rowclone { animation: lineUp .28s ease-out; }
-#nowLines .vl.ghost, #nowLines .bn { display: none; }   /* 提示条只放当前声部，图标能显示得更大 */
-.now .rowclone { display: flex; flex: none; }
-.now .rowclone .bar { flex-grow: 0; }
-@keyframes lineUp { from { transform: translateY(26px); opacity: .3; } to { transform: none; opacity: 1; } }
+/* 收起后的迷你播放条 */
+.now { margin-top: 8px; display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; box-shadow: var(--shadow); overflow: hidden; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: .5; } }
-.now .nx { display: flex; flex-direction: column; align-items: center; font-size: 15px; flex: none; padding: 2px 3px; border-radius: 6px; transition: opacity .2s; }
-.now .lrow.next .nx { font-size: 13px; padding: 0 2px; }
-.now .nx .nfg { min-height: 1px; }
-.now .nx.rest { color: var(--muted); }
-.now .nx.past { opacity: .35; }
-.now .nx.hl { background: var(--now); color: var(--now-ink); }
-.now .nx .nly { font-size: 12px; height: 15px; line-height: 15px; color: var(--muted); }
-.now .nx.hl .nly { color: inherit; }
-.now .nbar { flex: none; align-self: stretch; width: 1px; background: var(--line); margin: 4px 2px; }
-@media (prefers-reduced-motion: reduce) { .now .lines.enter .rowclone { animation: none; } }
 .pc .ly { display: none; height: 20px; font-size: 15px; line-height: 20px; white-space: nowrap; }
 body.has-ly .pc .ly { display: block; }
 .vl.ghost .pc .ly { font-size: 12px; height: 16px; line-height: 16px; }
-body:not(.has-ly) .now .nx .nly { display: none; }
-.now .msg { color: var(--muted); font-size: 12px; line-height: 1.5; }
-.now .msg b { color: var(--ink); font-size: 20px; }
 .kbd { display: block; }
 
 /* tabs */
 #tab-chart, #tab-pages { margin-top: 12px; }
-.navbox { margin: 0 0 0 auto; align-self: center; }   /* 收起时靠这一行的最右边，和左边的音轨/速度两端对齐 */
-.navbox[open] { flex-basis: 100%; margin-left: 0; border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 2px; }
-.navbox summary { cursor: pointer; font-size: 13px; line-height: 30px; color: var(--ink); list-style-position: inside; }
-.navbox summary .navhint { color: var(--muted); }
-.navbox[open] summary { margin-bottom: 6px; }
+/* 「选项」按钮一直在这一行的最右边（展开前后位置不变），展开的内容另起一整行放在下面 */
+.navbtn { margin-left: auto; align-self: center; border: 0; background: none; padding: 0 2px; cursor: pointer; font: inherit; font-size: 13px; line-height: 30px; color: var(--ink); white-space: nowrap; }
+.navbtn .navhint { color: var(--muted); }
+.navbtn .navarr { display: inline-block; font-size: 10px; margin-right: 4px; transition: transform .15s; }
+.navbtn[aria-expanded="true"] .navarr { transform: rotate(90deg); }
+.navbox { flex-basis: 100%; min-width: 0; border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 2px; }
 .optrow { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; margin: 2px 0 4px; }
 .optrow label { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
 .tabs { display: flex; gap: 6px; margin: 4px 0 8px; flex-wrap: wrap; }
@@ -144,7 +117,7 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .chips button.cur { border-color: var(--accent); background: var(--accent-soft); }
 
 /* score */
-.sec { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 12px 14px; margin-bottom: 12px; box-shadow: var(--shadow); scroll-margin-top: 230px; }
+.sec { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 12px 14px; margin-bottom: 12px; box-shadow: var(--shadow); scroll-margin-top: 170px; }
 .sec.cur { border-color: var(--accent); }
 .sec.backing { padding-bottom: 12px; }
 .sec.backing .sechead { margin-bottom: 0; }
@@ -152,12 +125,14 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .sechead h3 { margin: 0; font-size: 17px; }
 .sechead .d { color: var(--muted); font-size: 13px; }
 .sechead .go { margin-left: auto; border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 3px 10px; cursor: pointer; font-size: 13px; }
-.bars { display: flex; flex-direction: column; gap: 14px; }
-.prow { display: flex; flex-wrap: wrap; row-gap: 14px; }   /* 一行 = 纸谱上的一行；屏幕太窄时才折行 */
-.bar { flex: 0 0 auto; border-right: 2px solid var(--line); padding: 0 5px; display: flex; flex-direction: column; gap: 4px; }   /* 紧凑：按内容的自然宽度 */
-.bar.first { border-left: 2px solid var(--line); }
+.bars { display: flex; flex-wrap: wrap; row-gap: 14px; padding-left: 2px; }   /* 小节一个接一个往右排，排不下才折行 */
+.prow { display: contents; }
+.bars > .pmark { flex-basis: 100%; }   /* 「纸谱第 N 页」单独占一整行 */
+.bar { flex: 0 0 auto; border-left: 2px solid var(--line); border-right: 2px solid var(--line); margin-left: -2px; padding: 0 5px; display: flex; flex-direction: column; gap: 4px; }   /* 紧凑：按内容的自然宽度；左右都有小节线，相邻的叠在一起，每行开头也有线 */
 .bar .bn { font-size: 10px; color: var(--muted); height: 12px; }
-.vgrid { display: grid; column-gap: 3px; row-gap: 4px; justify-content: start; }
+.vgrid { display: grid; column-gap: 0; row-gap: 4px; justify-content: start; }
+/* 每拍分成 24 个小格，音符按它在这一拍里的实际起点放进对应的格：两个声部同一时刻的音上下对齐（和纸谱一样） */
+.vgrid .pc.bs:not(.b0) { margin-left: 6px; }   /* 每拍开头留一点间隔，拍和拍分得清 */
 .vl { display: contents; }   /* 声部只是逻辑分组，实际排进 .vgrid 的同一张网格 */
 .vl .who { display: none; }
 .beat { display: flex; align-items: stretch; min-width: 0; }
@@ -212,24 +187,24 @@ body.has-ly .vl.ghost .pc { min-width: 15px; }
 #landBtn:not([hidden]) + #themeBtn { margin-left: 0; }
 /* 收起 / 展开 */
 .now { position: relative; }
-.nowbody { display: flex; align-items: center; gap: inherit; flex: 1; min-width: 0; height: 100%; }
+body:not(.folded) .now { display: none; }   /* 「现在吹」提示条已去掉（和下面谱子的高亮重复），只在收起时当迷你播放条用 */
 .now .mini { display: none; flex: none; }
 .now .mini.play { width: 38px; height: 38px; }
 .now .minictl { display: none; }
-body.folded .now .minictl { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex: none; }
+body.folded .now .minictl { display: flex; flex-direction: row; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+body.folded .now .minictl #unfoldBtn { margin-left: auto; }
+.now .mtime { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.now .msec { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 body.folded .now .minictl .sk { height: 28px; min-width: 0; padding: 0 7px; font-size: 12px; white-space: nowrap; }
 .miniprog { display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--line); }
 .miniprog i { display: block; height: 100%; width: 0; background: var(--accent); }
 .fold { margin-left: 4px; }
 body.folded header.top, body.folded .player, body.folded .tabs, body.folded .chips { display: none !important; }
 body.folded .dock { display: block; padding: 6px 0; }
-body.folded .now { margin-top: 0; height: 170px; padding: 6px 8px 9px; gap: 8px; }
+body.folded .now { margin-top: 0; height: auto; padding: 6px 10px 9px; gap: 8px; }
 body.folded .now .mini { display: grid; place-items: center; }
 body.folded .miniprog { display: block; }
-body.folded .now .cur svg { width: 56px; height: 70px; }
-body.folded .now .nx svg { width: 24px; height: 30px; }
-body.folded .now .curname { font-size: 24px; }
-body.folded .sec { scroll-margin-top: 100px; }
+body.folded .sec { scroll-margin-top: 70px; }
 body.folded .wrap { padding-top: 0; }
 .bars { min-width: 0; }
 .bar { max-width: 100%; }
@@ -257,23 +232,16 @@ body.folded .wrap { padding-top: 0; }
   .sec { padding: 10px 6px 12px; }
   .ctrls { gap: 6px 10px; }
   .player { padding: 8px 10px; }
-  .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
-  .now .curbox { min-width: 64px; }
-  .navbox .navhint, .navbox #navSum, .navbox .navdot { display: none; }   /* 手机上折叠标题只留「选项」，和音轨、速度放在同一行 */
-  .navbox:not([open]) { white-space: nowrap; }
+  .navbtn .navhint, .navbtn #navSum, .navbtn .navdot { display: none; }   /* 手机上按钮只留「选项」，和音轨、速度放在同一行 */
   .ctrls select#track { width: 112px; }    /* 音轨、速度、选项 一行放下 */
   .ctrls select#rate { width: 64px; }
   .ctrls { gap: 6px 8px; }
   .seg button { padding: 5px 9px; }
-  .now .lines { padding-left: 8px; }
-  .now .cur svg { width: 56px; height: 70px; }
-  .now .nx svg { width: 24px; height: 30px; }
-  .now .curname { font-size: 24px; }
   .sk { height: 30px; min-width: 34px; padding: 0 6px; }
   .play { width: 40px; height: 40px; }
   header.top h1 { font-size: 18px; }
   .pc .dg { font-size: 20px; }
-  .sec { scroll-margin-top: 250px; }
+  .sec { scroll-margin-top: 180px; }
 }
 /* 小屏 iPhone（≤400px 宽，如 mini / SE / 12~15 标准版）：图标再小一点点，纸谱一行仍能放进一行 */
 @media (max-width: 400px) {
@@ -291,7 +259,7 @@ body.folded .wrap { padding-top: 0; }
   header.top { padding: 6px 0 0; }
   header.top h1 { font-size: 14px; }
   header.top p { display: none; }
-  .dock { display: block; padding: 4px 0; }   /* 手机横屏也上下排：播放器在上，「现在吹」在下，占满整宽 */
+  .dock { display: block; padding: 4px 0; }
   .player { padding: 6px 8px; }
   .row { gap: 6px; }
   .play { width: 36px; height: 36px; }
@@ -302,17 +270,13 @@ body.folded .wrap { padding-top: 0; }
   .seg button { padding: 3px 8px; }
   .marks button span { display: none; }
   .ctrls { margin-top: 4px; gap: 4px 8px; font-size: 12px; }
-  .now { margin-top: 6px; height: 118px; min-height: 0; padding: 6px 8px; gap: 8px; }
-  .now .cur svg { width: 52px; height: 65px; }
-  .now .nx svg { width: 24px; height: 30px; }
-  .now .curname { font-size: 22px; }
   .tabs { margin: 6px 0; }
   .tabs button { padding: 3px 10px; font-size: 13px; }
   .pc .fg svg { width: 24px; height: 30px; }
   .pc .fg { height: 33px; }
   .pc.tie::before { --tie-top: 35px; }
   .pc .dg { font-size: 20px; }
-  .sec { scroll-margin-top: 240px; padding: 8px 8px 10px; }
+  .sec { scroll-margin-top: 150px; padding: 8px 8px 10px; }
 }
 </style>
 </head>
@@ -373,8 +337,8 @@ body.folded .wrap { padding-top: 0; }
         <label>速度 <select id="rate">
           <option value="0.6">0.6×</option><option value="0.75">0.75×</option><option value="0.85">0.85×</option><option value="1" selected>1.0×</option>
         </select></label>
-        <details class="navbox" id="navbox">
-          <summary>选项<span class="navdot"> · </span><span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
+        <button type="button" class="navbtn" id="navBtn" aria-expanded="false" aria-controls="navbox"><span class="navarr">▶</span>选项<span class="navdot"> · </span><span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></button>
+        <div class="navbox" id="navbox" hidden>
           <div class="optrow">
             <span class="seg" id="partSeg" role="group" aria-label="看哪个声部">
               <button data-part="oca" class="on">看陶笛</button><button data-part="mel">看口琴</button>
@@ -390,14 +354,15 @@ body.folded .wrap { padding-top: 0; }
             <button data-tab="pages">原谱（PDF）</button>
           </nav>
           <div class="chips" id="chips"></div>
-        </details>
+        </div>
       </div>
       <div id="errBox" class="err hidden"></div>
     </div>
     <div class="now" id="now">
-      <div class="nowbody" id="nowBody"><div class="curbox" id="nowLeft"></div><div class="lines" id="nowLines"></div></div>
       <div class="minictl">
         <button class="play mini" id="miniPlay" aria-label="播放/暂停"><svg class="pico" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></button>
+        <span class="mtime" id="miniTime">0:00</span>
+        <span class="msec" id="miniSec"></span>
         <button class="sk mini" id="unfoldBtn" title="展开播放器和选项">展开 ▼</button>
       </div>
       <div class="miniprog"><i id="miniProg"></i></div>
