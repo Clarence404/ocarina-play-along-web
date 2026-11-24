@@ -154,19 +154,21 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .sechead .go { margin-left: auto; border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 3px 10px; cursor: pointer; font-size: 13px; }
 .bars { display: flex; flex-direction: column; gap: 14px; }
 .prow { display: flex; flex-wrap: wrap; row-gap: 14px; }   /* 一行 = 纸谱上的一行；屏幕太窄时才折行 */
-.bar { flex: var(--beats, 4) 1 0; border-right: 2px solid var(--line); padding: 0 6px; display: flex; flex-direction: column; gap: 4px; }
+.bar { flex: 0 0 auto; border-right: 2px solid var(--line); padding: 0 5px; display: flex; flex-direction: column; gap: 4px; }   /* 紧凑：按内容的自然宽度 */
 .bar.first { border-left: 2px solid var(--line); }
 .bar .bn { font-size: 10px; color: var(--muted); height: 12px; }
-.vl { display: grid; gap: 0 2px; }
+.vgrid { display: grid; column-gap: 3px; row-gap: 4px; justify-content: start; }
+.vl { display: contents; }   /* 声部只是逻辑分组，实际排进 .vgrid 的同一张网格 */
 .vl .who { display: none; }
-.beat { display: flex; align-items: stretch; min-width: 40px; }
-.vl.ghost .beat { min-width: 30px; }
-.pc { min-width: 18px; }
-.vl.prim:not(.nofing) .pc { min-width: 33px; }
+.beat { display: flex; align-items: stretch; min-width: 0; }
+.vl.ghost .beat { min-width: 0; }
+.pc { min-width: 16px; }
+.vl.prim:not(.nofing) .pc { min-width: 32px; }
+.pc.ext { min-width: 14px; }   /* 延长线「–」、附点「·」不需要和音符一样宽 */
 .pmark { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 2px 0 10px; }
 .pmark::before, .pmark::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
 .sec .pmark { margin: 0; }
-.pc { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: 6px; padding: 2px 0 3px; position: relative; min-width: 0; }
+.pc { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: 6px; padding: 2px 1px 3px; position: relative; }
 /* 有歌词时每个音至少容得下一个汉字，短音（十六分音符）的字不会叠在一起；带指法的那一行本来就更宽 */
 body.has-ly .vl.nofing .pc { min-width: 19px; }
 body.has-ly .vl.ghost .pc { min-width: 15px; }
@@ -243,14 +245,16 @@ body.folded .wrap { padding-top: 0; }
   .player-actions .repeat-label input:checked::before { transform: translateX(12px); }
   .player-actions #fsBtn { min-width: 30px; padding: 0 3px; font-size: 0; }
   .player-actions #fsBtn::before { content: '⛶'; font-size: 14px; }
-  .beat { min-width: 30px; }
-  .vl.ghost .beat { min-width: 24px; }
-  .vl.prim:not(.nofing) .pc { min-width: 28px; }
-  .pc .fg svg { width: 27px; height: 34px; }
-  .pc .fg { height: 38px; }
-  .pc.tie::before { --tie-top: 40px; }
-  .bar { padding: 0 3px; }
-  .sec { padding: 10px 8px 12px; }
+  /* 手机：紧凑排版，让纸谱一行（约 14 个音）尽量放进一行 */
+  .vl.prim:not(.nofing) .pc { min-width: 23px; }
+  .pc { padding: 2px 0 3px; }
+  .pc .fg svg { width: 23px; height: 29px; }
+  .pc .fg { height: 32px; }
+  .pc.tie::before { --tie-top: 34px; }
+  .bar { padding: 0 2px; }
+  .vgrid { column-gap: 1px; }
+  .wrap { padding-left: 10px; padding-right: 10px; }
+  .sec { padding: 10px 6px 12px; }
   .ctrls { gap: 6px 10px; }
   .player { padding: 8px 10px; }
   .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
@@ -270,6 +274,16 @@ body.folded .wrap { padding-top: 0; }
   header.top h1 { font-size: 18px; }
   .pc .dg { font-size: 20px; }
   .sec { scroll-margin-top: 250px; }
+}
+/* 小屏 iPhone（≤400px 宽，如 mini / SE / 12~15 标准版）：图标再小一点点，纸谱一行仍能放进一行 */
+@media (max-width: 400px) {
+  .vl.prim:not(.nofing) .pc { min-width: 21px; }
+  .pc .fg svg { width: 21px; height: 26px; }
+  .pc .fg { height: 29px; }
+  .pc.tie::before { --tie-top: 31px; }
+  .pc .dg { font-size: 19px; }
+  .wrap { padding-left: 8px; padding-right: 8px; }
+  .sec { padding-left: 5px; padding-right: 5px; }
 }
 /* 手机横屏：矮屏幕，播放器和"现在吹"并排成一条，标题收起 */
 @media (orientation: landscape) and (max-height: 520px) {
@@ -294,9 +308,9 @@ body.folded .wrap { padding-top: 0; }
   .now .curname { font-size: 22px; }
   .tabs { margin: 6px 0; }
   .tabs button { padding: 3px 10px; font-size: 13px; }
-  .pc .fg svg { width: 27px; height: 34px; }
-  .pc .fg { height: 38px; }
-  .pc.tie::before { --tie-top: 40px; }
+  .pc .fg svg { width: 24px; height: 30px; }
+  .pc .fg { height: 33px; }
+  .pc.tie::before { --tie-top: 35px; }
   .pc .dg { font-size: 20px; }
   .sec { scroll-margin-top: 240px; padding: 8px 8px 10px; }
 }
