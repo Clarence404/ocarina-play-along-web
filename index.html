@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>练习页</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="练习页">
+<style>
+:root {
+  --bg: #f6f4ef;
+  --card: #ffffff;
+  --ink: #1f2328;
+  --muted: #6b6f76;
+  --line: #e3dfd6;
+  --accent: #2f7d4f;
+  --accent-soft: #e2f1e7;
+  --now: #ffe08a;
+  --now-ink: #6b4a00;
+  --ghost: #9aa0a6;
+  --ghost-now: #eef0f3;
+  --oca-body: #9ed36a;
+  --oca-edge: #4f7a2a;
+  --hole-open: #ffffff;
+  --hole-closed: #111111;
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161a; --card: #1d2026; --ink: #e8e6e1; --muted: #a2a6ad; --line: #2f333b;
+    --accent: #6fcf97; --accent-soft: #1f3a2b; --now: #6b5414; --now-ink: #ffe9a8;
+    --ghost: #6f757d; --ghost-now: #2a2e35; --oca-body: #7fb34f; --oca-edge: #39591d;
+    --hole-open: #f4f4f4; --hole-closed: #0b0b0b; --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14161a; --card: #1d2026; --ink: #e8e6e1; --muted: #a2a6ad; --line: #2f333b;
+  --accent: #6fcf97; --accent-soft: #1f3a2b; --now: #6b5414; --now-ink: #ffe9a8;
+  --ghost: #6f757d; --ghost-now: #2a2e35; --oca-body: #7fb34f; --oca-edge: #39591d;
+  --hole-open: #f4f4f4; --hole-closed: #0b0b0b; --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif; }
+button, select, input { font: inherit; color: inherit; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px 80px; }
+header.top { padding: 18px 0 6px; }
+header.top h1 { margin: 0; font-size: 22px; letter-spacing: .5px; }
+header.top p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+/* sticky player */
+.dock { position: sticky; top: 0; z-index: 20; background: var(--bg); padding: 8px 0 8px; }
+.player { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 10px 12px; }
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.play { width: 46px; height: 46px; border-radius: 50%; border: none; background: var(--accent); color: #fff; cursor: pointer; flex: none; display: grid; place-items: center; }
+.play svg { width: 20px; height: 20px; fill: currentColor; }
+.seek { flex: 1 1 220px; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.seek .track { flex: 1; min-width: 0; position: relative; padding-bottom: 16px; }
+.seek input { width: 100%; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.marks { position: absolute; left: 7px; right: 7px; top: 22px; height: 14px; }
+.marks button { position: absolute; transform: translateX(-1px); border: none; background: none; padding: 0 0 0 3px; border-left: 2px solid var(--line); font-size: 10px; line-height: 12px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.marks button:hover { color: var(--accent); border-color: var(--accent); }
+.tip { position: absolute; top: -24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); font-size: 12px; padding: 2px 6px; border-radius: 6px; pointer-events: none; white-space: nowrap; }
+.tp { display: inline-flex; align-items: center; gap: 6px; flex: none; }
+.sk { border: 1px solid var(--line); background: var(--card); border-radius: 999px; height: 34px; min-width: 40px; padding: 0 8px; cursor: pointer; font-size: 13px; }
+.sk:hover { border-color: var(--accent); }
+@media (max-width: 640px) { .marks button span { display: none; } .seek { flex-basis: 100%; } }
+.time { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.ctrls { margin-top: 8px; gap: 8px 14px; font-size: 13px; }
+.ctrls label { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.ctrls select { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; max-width: 100%; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.seg button { border: none; background: transparent; padding: 5px 12px; cursor: pointer; }
+.seg button.on { background: var(--accent); color: #fff; }
+
+/* now strip */
+.now { margin-top: 8px; display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; box-shadow: var(--shadow); height: 196px; overflow: hidden; }
+/* 高度固定：在"音符/休止"之间切换时不会把下面的谱子顶上顶下 */
+.now .cur { display: flex; align-items: center; gap: 10px; flex: none; }
+.now .curname { font-size: 34px; font-weight: 700; line-height: 1; min-width: 44px; text-align: center; position: relative; }
+.now .curname small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 6px; }
+/* 右边两行：上 = 当前行（带指法、高亮走动），下 = 下一行（小字、淡色） */
+.now .curbox { flex: none; display: flex; align-items: center; min-width: 110px; }
+.now .lines { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 4px; overflow: hidden; border-left: 1px solid var(--line); padding-left: 12px; }
+.now .lrow { display: flex; gap: 6px; align-items: flex-end; overflow: hidden; white-space: nowrap; }
+.now .lrow.next { opacity: .5; font-size: 12px; min-height: 22px; }
+.now .lrow.next .nfg { display: none; }
+.now .lines.enter .rowclone { animation: lineUp .28s ease-out; }
+.now .rowclone { display: flex; flex: none; }
+.now .rowclone .bar { flex-grow: 0; }
+@keyframes lineUp { from { transform: translateY(26px); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: .5; } }
+.now .nx { display: flex; flex-direction: column; align-items: center; font-size: 15px; flex: none; padding: 2px 3px; border-radius: 6px; transition: opacity .2s; }
+.now .lrow.next .nx { font-size: 13px; padding: 0 2px; }
+.now .nx .nfg { min-height: 1px; }
+.now .nx.rest { color: var(--muted); }
+.now .nx.past { opacity: .35; }
+.now .nx.hl { background: var(--now); color: var(--now-ink); }
+.now .nx .nly { font-size: 12px; height: 15px; line-height: 15px; color: var(--muted); }
+.now .nx.hl .nly { color: inherit; }
+.now .nbar { flex: none; align-self: stretch; width: 1px; background: var(--line); margin: 4px 2px; }
+@media (prefers-reduced-motion: reduce) { .now .lines.enter .rowclone { animation: none; } }
+.pc .ly { display: none; height: 20px; font-size: 15px; line-height: 20px; white-space: nowrap; }
+body.has-ly .pc .ly { display: block; }
+.vl.ghost .pc .ly { font-size: 12px; height: 16px; line-height: 16px; }
+body:not(.has-ly) .now .nx .nly { display: none; }
+.now .msg { color: var(--muted); font-size: 14px; }
+.now .msg b { color: var(--ink); font-size: 22px; }
+.kbd { display: block; }
+
+/* tabs */
+.tabs { display: flex; gap: 6px; margin: 14px 0 10px; flex-wrap: wrap; }
+.tabs button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.tabs button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.chips button { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
+.chips button.cur { border-color: var(--accent); background: var(--accent-soft); }
+
+/* score */
+.sec { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 12px 14px; margin-bottom: 12px; box-shadow: var(--shadow); scroll-margin-top: 230px; }
+.sec.cur { border-color: var(--accent); }
+.sec.backing { padding-bottom: 12px; }
+.sec.backing .sechead { margin-bottom: 0; }
+.sechead { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.sechead h3 { margin: 0; font-size: 17px; }
+.sechead .d { color: var(--muted); font-size: 13px; }
+.sechead .go { margin-left: auto; border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 3px 10px; cursor: pointer; font-size: 13px; }
+.bars { display: flex; flex-direction: column; gap: 14px; }
+.prow { display: flex; flex-wrap: wrap; row-gap: 14px; }   /* 一行 = 纸谱上的一行；屏幕太窄时才折行 */
+.bar { flex: var(--beats, 4) 1 0; border-right: 2px solid var(--line); padding: 0 6px; display: flex; flex-direction: column; gap: 4px; }
+.bar.first { border-left: 2px solid var(--line); }
+.bar .bn { font-size: 10px; color: var(--muted); height: 12px; }
+.vl { display: grid; gap: 0 2px; }
+.vl .who { display: none; }
+.beat { display: flex; align-items: stretch; min-width: 40px; }
+.vl.ghost .beat { min-width: 30px; }
+.pc { min-width: 18px; }
+.vl.prim:not(.nofing) .pc { min-width: 26px; }
+.pmark { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 2px 0 10px; }
+.pmark::before, .pmark::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
+.sec .pmark { margin: 0; }
+.pc { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: 6px; padding: 2px 0 3px; position: relative; min-width: 0; }
+.pc .fg { height: 40px; display: flex; align-items: flex-end; justify-content: center; }
+.vl.nofing .pc .fg, .vl.ghost .pc .fg { display: none; }
+.pc .hd { height: 9px; font-size: 14px; line-height: 6px; text-align: center; }
+.pc .dg { font-size: 23px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pc .ul { align-self: stretch; height: 11px; position: relative; }
+.pc .ul i { position: absolute; left: 0; right: 0; height: 2px; background: currentColor; }
+.pc .ul i:nth-child(1) { top: 1px; } .pc .ul i:nth-child(2) { top: 5px; } .pc .ul i:nth-child(3) { top: 9px; }
+.pc .ld { height: 9px; font-size: 14px; line-height: 4px; text-align: center; }
+.pc.tie::before { content: ""; position: absolute; left: -55%; width: 90%; top: var(--tie-top, 42px); height: 9px; border: 2px solid currentColor; border-bottom: none; border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: .55; }
+.vl.nofing .pc.tie::before, .vl.ghost .pc.tie::before { --tie-top: 2px; }
+.pc .tri { position: absolute; top: 34px; left: 0; font-size: 10px; color: var(--muted); }
+.vl.nofing .pc .tri, .vl.ghost .pc .tri { top: -6px; }
+.pc.rest .dg, .pc.ext .dg { font-weight: 500; }
+.vl.ghost { color: var(--ghost); }
+.vl.ghost .dg { font-size: 17px; }
+.vl.ghost .pc .ul { height: 9px; }
+/* 高亮用 .hl（不能叫 .now：会和顶部"现在吹"条的 .now 样式撞名，导致高亮的音符被撑高、往下掉） */
+.pc.hl { background: var(--now); color: var(--now-ink); }
+.vl.ghost .pc.hl { background: var(--ghost-now); color: var(--ink); }
+.voicetag { font-size: 11px; color: var(--muted); margin: 0 0 2px; }
+.hideghost .vl.ghost, .hideghost .voicetag.g { display: none; }
+
+/* chart & pages */
+.chart { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+.chart .c { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.chart .c .j { font-size: 26px; font-weight: 700; }
+.chart .c .l { color: var(--muted); font-size: 13px; }
+.note { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.dls { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; max-width: 900px; margin: 0 auto 12px; }
+.dl { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 10px; background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; }
+.dl::before { content: '⬇'; }
+.dls .note { margin: 0; }
+.pages img { width: 100%; max-width: 900px; display: block; margin: 0 auto 12px; border-radius: 8px; border: 1px solid var(--line); background: #fff; }
+.hidden { display: none !important; }
+.theme { margin-left: auto; border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
+.err { background: #fde8e8; color: #8a1c1c; border-radius: 10px; padding: 10px 12px; margin-top: 8px; font-size: 13px; }
+
+#landBtn:not([hidden]) + #themeBtn { margin-left: 0; }
+/* 收起 / 展开 */
+.now { position: relative; }
+.nowbody { display: flex; align-items: center; gap: inherit; flex: 1; min-width: 0; height: 100%; }
+.now .mini { display: none; flex: none; }
+.now .mini.play { width: 40px; height: 40px; }
+.miniprog { display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--line); }
+.miniprog i { display: block; height: 100%; width: 0; background: var(--accent); }
+.fold { margin-left: 4px; }
+body.folded header.top, body.folded .player, body.folded .tabs, body.folded .chips { display: none !important; }
+body.folded .dock { display: block; padding: 6px 0; }
+body.folded .now { margin-top: 0; height: 170px; padding: 6px 10px 9px; gap: 10px; }
+body.folded .now .mini { display: grid; place-items: center; }
+body.folded .miniprog { display: block; }
+body.folded .now .cur svg { width: 46px; height: 58px; }
+body.folded .now .nx svg { width: 24px; height: 30px; }
+body.folded .now .curname { font-size: 24px; }
+body.folded .sec { scroll-margin-top: 100px; }
+body.folded .wrap { padding-top: 0; }
+.opts { display: contents; }
+.opts summary { display: none; }
+.bars { min-width: 0; }
+.bar { max-width: 100%; }
+.sec { overflow-x: auto; }
+@media (max-width: 640px) {
+  .beat { min-width: 30px; }
+  .vl.ghost .beat { min-width: 24px; }
+  .vl.prim:not(.nofing) .pc { min-width: 21px; }
+  .pc .fg svg { width: 20px; height: 25px; }
+  .pc .fg { height: 30px; }
+  .pc.tie::before { --tie-top: 32px; }
+  .bar { padding: 0 3px; }
+  .sec { padding: 10px 8px 12px; }
+  .ctrls { gap: 6px 10px; }
+  .opts { display: block; flex-basis: 100%; }
+  .opts summary { display: list-item; cursor: pointer; color: var(--muted); }
+  .opts[open] { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+  .opts[open] summary { flex-basis: 100%; }
+  .player { padding: 8px 10px; }
+  .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
+  .now .curbox { min-width: 84px; }
+  .now .lines { padding-left: 8px; }
+  .now .cur svg { width: 46px; height: 58px; }
+  .now .nx svg { width: 24px; height: 30px; }
+  .now .curname { font-size: 24px; }
+  .sk { height: 30px; min-width: 34px; padding: 0 6px; }
+  .play { width: 40px; height: 40px; }
+  header.top h1 { font-size: 18px; }
+  .pc .dg { font-size: 20px; }
+  .sec { scroll-margin-top: 250px; }
+}
+/* 手机横屏：矮屏幕，播放器和"现在吹"并排成一条，标题收起 */
+@media (orientation: landscape) and (max-height: 520px) {
+  .wrap { padding: 0 12px 40px; }
+  header.top { padding: 6px 0 0; }
+  header.top h1 { font-size: 14px; }
+  header.top p { display: none; }
+  .dock { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 8px; padding: 4px 0; align-items: stretch; }
+  .player { padding: 6px 8px; }
+  .row { gap: 6px; }
+  .play { width: 36px; height: 36px; }
+  .sk { height: 28px; min-width: 32px; padding: 0 5px; font-size: 12px; }
+  .seek { flex: 1 1 120px; }
+  .seek .track { padding-bottom: 14px; }
+  .ctrls select { max-width: 150px; padding: 2px 4px; }
+  .seg button { padding: 3px 8px; }
+  .marks button span { display: none; }
+  .ctrls { margin-top: 4px; gap: 4px 8px; font-size: 12px; }
+  .opts { display: block; flex-basis: 100%; }
+  .opts summary { display: list-item; cursor: pointer; color: var(--muted); }
+  .opts[open] { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+  .opts[open] summary { flex-basis: 100%; }
+  .now { margin-top: 0; height: auto; min-height: 0; padding: 6px 8px; gap: 8px; }
+  .now .cur svg { width: 44px; height: 55px; }
+  .now .nx svg { width: 24px; height: 30px; }
+  .now .curname { font-size: 22px; }
+  .tabs { margin: 6px 0; }
+  .tabs button { padding: 3px 10px; font-size: 13px; }
+  .pc .fg svg { width: 20px; height: 25px; }
+  .pc .fg { height: 30px; }
+  .pc.tie::before { --tie-top: 32px; }
+  .pc .dg { font-size: 20px; }
+  .sec { scroll-margin-top: 150px; padding: 8px 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div id="gate" style="position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px">
+  <form id="gateForm" style="background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px 20px;width:100%;max-width:360px">
+    <h2 style="margin:0 0 6px;font-size:20px">练习页</h2>
+    <p style="margin:0 0 14px;color:var(--muted);font-size:13px">内容已加密，请输入密码</p>
+    <input id="gateUser" name="username" autocomplete="username" value="practice" style="display:none">
+    <input id="gatePw" name="password" type="password" autocomplete="current-password" placeholder="密码" autocapitalize="off" autocorrect="off" spellcheck="false"
+      style="width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)">
+    <label style="display:flex;align-items:center;gap:6px;margin:12px 0;font-size:14px"><input type="checkbox" id="gateRemember" checked> 在这台设备上记住</label>
+    <button type="submit" style="width:100%;font:inherit;font-size:16px;padding:10px;border:none;border-radius:10px;background:var(--accent);color:#fff">解锁</button>
+    <p id="gateMsg" style="margin:10px 0 0;min-height:18px;color:#c0392b;font-size:13px"></p>
+  </form>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="row">
+      <h1>美丽的神话 · 陶笛 / 口琴练习页</h1>
+      <button class="theme" id="landBtn" title="全屏并切到横屏（安卓手机支持；苹果手机请直接把手机横过来）" hidden>全屏横屏</button>
+      <button class="theme" id="themeBtn" title="切换深浅色">深/浅色</button>
+    </div>
+    <p>1=F　4/4　♩=65　AC 六孔陶笛（全按作 5̣ = C）　F 调口琴（和陶笛同一个八度）　前奏只有伴奏</p>
+  </header>
+
+  <div class="dock" id="dock">
+    <div class="player">
+      <div class="row">
+        <span class="tp">
+          <button class="sk" id="prevSec" title="上一段（从这段开头前一小节开始）">⏮</button>
+          <button class="sk" id="back5" title="后退 5 秒（键盘 ←）">−5s</button>
+          <button class="play" id="playBtn" aria-label="播放/暂停（空格）"><svg id="playIco" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></button>
+          <button class="sk" id="fwd5" title="快进 5 秒（键盘 →）">+5s</button>
+          <button class="sk" id="nextSec" title="下一段">⏭</button>
+          <button class="sk fold" id="foldBtn" title="收起播放器、选项和标签，只留一条">收起 ▲</button>
+        </span>
+        <div class="seek">
+          <span class="time" id="tCur">0:00</span>
+          <div class="track">
+            <input type="range" id="seek" min="0" max="295" step="0.05" value="0" aria-label="进度：拖动到任意位置播放">
+            <div class="marks" id="marks"></div>
+            <span class="tip hidden" id="tip"></span>
+          </div>
+          <span class="time" id="tTot">4:55</span>
+        </div>
+      </div>
+      <div class="row ctrls">
+        <label>音轨 <select id="track"></select></label>
+        <span class="seg" id="partSeg" role="group" aria-label="看哪个声部">
+          <button data-part="oca" class="on">看陶笛</button><button data-part="mel">看口琴</button>
+        </span>
+        <label>速度 <select id="rate">
+          <option value="0.6">0.6×</option><option value="0.75">0.75×</option><option value="0.85">0.85×</option><option value="1" selected>1.0×</option>
+        </select></label>
+        <details class="opts" id="opts" open><summary>选项</summary>
+        <label><input type="checkbox" id="loop"> 循环本段</label>
+        <label><input type="checkbox" id="follow" checked> 自动翻谱</label>
+        <label><input type="checkbox" id="fing" checked> 音符上显示指法</label>
+        <label><input type="checkbox" id="ghost" checked> 显示另一声部</label>
+        </details>
+      </div>
+      <div id="errBox" class="err hidden"></div>
+    </div>
+    <div class="now" id="now">
+      <button class="play mini" id="miniPlay" aria-label="播放/暂停"><svg class="pico" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></button>
+      <div class="nowbody" id="nowBody"><div class="curbox" id="nowLeft"></div><div class="lines" id="nowLines"></div></div>
+      <button class="sk mini" id="unfoldBtn" title="展开播放器和选项">展开 ▼</button>
+      <div class="miniprog"><i id="miniProg"></i></div>
+    </div>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button data-tab="score" class="on">跟随谱</button>
+    <button data-tab="chart">指法表</button>
+    <button data-tab="pages">原谱（PDF）</button>
+  </nav>
+
+  <section id="tab-score">
+    <div class="chips" id="chips"></div>
+    <div id="score"></div>
+  </section>
+
+  <section id="tab-chart" class="hidden">
+    <div class="chart" id="chart"></div>
+    <p class="note">● 按住　○ 放开；图标上面两个小孔、中间两个大孔在正面，最下面两个小孔是背面拇指孔（左拇指 / 右拇指）。<br>
+      带 * 的 7̣（E）和 4（♭B）两个指法是原谱注明「推算所得」的，请先试吹核对。<br>
+      直接按原谱唱名吹：原谱写 1=A，陶笛按唱名吹出来实际是 F 调，和伴奏一致。</p>
+  </section>
+
+  <section id="tab-pages" class="hidden pages"></section>
+</div>
+
+<audio id="audio" preload="auto"></audio>
+
+
+<script>
+(async () => {
+  const gate = document.getElementById('gate'), inp = document.getElementById('gatePw');
+  const msg = document.getElementById('gateMsg'), rem = document.getElementById('gateRemember');
+  if (!(window.crypto && crypto.subtle)) { msg.textContent = '这个浏览器不支持解密，请用 Safari / Chrome 打开 https 网址'; return; }
+  const meta = await (await fetch('meta.json', { cache: 'no-store' })).json();
+  const salt = Uint8Array.from(atob(meta.salt), c => c.charCodeAt(0));
+  let key = null;
+  const norm = s => s.trim().toLowerCase().replace(/\s+/g, '');
+  async function derive(pw) {
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: meta.iter, hash: 'SHA-256' }, base,
+      { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  }
+  async function dec(buf) {
+    const b = new Uint8Array(buf);
+    return crypto.subtle.decrypt({ name: 'AES-GCM', iv: b.slice(0, 12) }, key, b.slice(12));
+  }
+  const TYPES = { mp3: 'audio/mpeg', pdf: 'application/pdf' };
+  window.__decryptFetch = async file => {
+    const r = await fetch(file.split('/').map(encodeURIComponent).join('/') + '.bin');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return new Blob([await dec(await r.arrayBuffer())], { type: TYPES[file.split('.').pop()] || 'application/octet-stream' });
+  };
+  async function unlock(pw, auto) {
+    msg.style.color = 'var(--muted)'; msg.textContent = '解锁中…';
+    try {
+      key = await derive(pw);
+      const r = await fetch('app.bin', { cache: 'no-store' });
+      const p = JSON.parse(new TextDecoder().decode(await dec(await r.arrayBuffer())));
+      try { if (rem.checked || auto) localStorage.setItem('ocarina-pw', pw); else localStorage.removeItem('ocarina-pw'); } catch (e) {}
+      gate.remove();
+      document.title = p.title || '练习页';
+      for (const code of [p.lyrics, p.app]) { const s = document.createElement('script'); s.textContent = code; document.body.appendChild(s); }
+    } catch (e) {
+      key = null; msg.style.color = '#c0392b';
+      msg.textContent = auto ? '' : '密码不对，请再试一次';
+      if (auto) { try { localStorage.removeItem('ocarina-pw'); } catch (e2) {} }
+    }
+  }
+  document.getElementById('gateForm').addEventListener('submit', e => { e.preventDefault(); unlock(norm(inp.value), false); });
+  let saved = null; try { saved = localStorage.getItem('ocarina-pw'); } catch (e) {}
+  if (saved) unlock(saved, true); else inp.focus();
+})();
+</script>
+</body>
+</html>
