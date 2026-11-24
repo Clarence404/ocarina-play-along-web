@@ -62,6 +62,16 @@ header.top p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 .marks button { position: absolute; transform: translateX(-1px); border: none; background: none; padding: 0 0 0 3px; border-left: 2px solid var(--line); font-size: 10px; line-height: 12px; color: var(--muted); cursor: pointer; white-space: nowrap; }
 .marks button:hover { color: var(--accent); border-color: var(--accent); }
 .tip { position: absolute; top: -24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); font-size: 12px; padding: 2px 6px; border-radius: 6px; pointer-events: none; white-space: nowrap; }
+.qsec { display: none; }
+/* 手机/平板（触屏或窄屏）：进度条下的刻度太细点不中，换成一排可以左右滑的段落按钮，点一下从那段开始播 */
+@media (max-width: 900px), (pointer: coarse) {
+  .marks { display: none; }
+  .seek .track { padding-bottom: 0; }
+  .qsec { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 2px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .qsec::-webkit-scrollbar { display: none; }
+  .qsec button { flex: none; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 12px; font-size: 14px; cursor: pointer; }
+  .qsec button.cur { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+}
 .tp { display: inline-flex; align-items: center; gap: 6px; flex: none; }
 .sk { border: 1px solid var(--line); background: var(--card); border-radius: 999px; height: 34px; min-width: 40px; padding: 0 8px; cursor: pointer; font-size: 13px; }
 .sk:hover { border-color: var(--accent); }
@@ -87,6 +97,7 @@ header.top p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 .now .lrow.next { opacity: .5; font-size: 12px; min-height: 22px; }
 .now .lrow.next .nfg { display: none; }
 .now .lines.enter .rowclone { animation: lineUp .28s ease-out; }
+#nowLines .vl.ghost, #nowLines .bn { display: none; }   /* 提示条只放当前声部，图标能显示得更大 */
 .now .rowclone { display: flex; flex: none; }
 .now .rowclone .bar { flex-grow: 0; }
 @keyframes lineUp { from { transform: translateY(26px); opacity: .3; } to { transform: none; opacity: 1; } }
@@ -143,12 +154,12 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .beat { display: flex; align-items: stretch; min-width: 40px; }
 .vl.ghost .beat { min-width: 30px; }
 .pc { min-width: 18px; }
-.vl.prim:not(.nofing) .pc { min-width: 26px; }
+.vl.prim:not(.nofing) .pc { min-width: 33px; }
 .pmark { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 2px 0 10px; }
 .pmark::before, .pmark::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
 .sec .pmark { margin: 0; }
 .pc { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: 6px; padding: 2px 0 3px; position: relative; min-width: 0; }
-.pc .fg { height: 40px; display: flex; align-items: flex-end; justify-content: center; }
+.pc .fg { height: 44px; display: flex; align-items: flex-end; justify-content: center; }
 .vl.nofing .pc .fg, .vl.ghost .pc .fg { display: none; }
 .pc .hd { height: 9px; font-size: 14px; line-height: 6px; text-align: center; }
 .pc .dg { font-size: 23px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -156,7 +167,7 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .pc .ul i { position: absolute; left: 0; right: 0; height: 2px; background: currentColor; }
 .pc .ul i:nth-child(1) { top: 1px; } .pc .ul i:nth-child(2) { top: 5px; } .pc .ul i:nth-child(3) { top: 9px; }
 .pc .ld { height: 9px; font-size: 14px; line-height: 4px; text-align: center; }
-.pc.tie::before { content: ""; position: absolute; left: -55%; width: 90%; top: var(--tie-top, 42px); height: 9px; border: 2px solid currentColor; border-bottom: none; border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: .55; }
+.pc.tie::before { content: ""; position: absolute; left: -55%; width: 90%; top: var(--tie-top, 46px); height: 9px; border: 2px solid currentColor; border-bottom: none; border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: .55; }
 .vl.nofing .pc.tie::before, .vl.ghost .pc.tie::before { --tie-top: 2px; }
 .pc .tri { position: absolute; top: 34px; left: 0; font-size: 10px; color: var(--muted); }
 .vl.nofing .pc .tri, .vl.ghost .pc .tri { top: -6px; }
@@ -199,7 +210,7 @@ body.folded .dock { display: block; padding: 6px 0; }
 body.folded .now { margin-top: 0; height: 170px; padding: 6px 10px 9px; gap: 10px; }
 body.folded .now .mini { display: grid; place-items: center; }
 body.folded .miniprog { display: block; }
-body.folded .now .cur svg { width: 46px; height: 58px; }
+body.folded .now .cur svg { width: 56px; height: 70px; }
 body.folded .now .nx svg { width: 24px; height: 30px; }
 body.folded .now .curname { font-size: 24px; }
 body.folded .sec { scroll-margin-top: 100px; }
@@ -210,10 +221,10 @@ body.folded .wrap { padding-top: 0; }
 @media (max-width: 640px) {
   .beat { min-width: 30px; }
   .vl.ghost .beat { min-width: 24px; }
-  .vl.prim:not(.nofing) .pc { min-width: 21px; }
-  .pc .fg svg { width: 20px; height: 25px; }
-  .pc .fg { height: 30px; }
-  .pc.tie::before { --tie-top: 32px; }
+  .vl.prim:not(.nofing) .pc { min-width: 28px; }
+  .pc .fg svg { width: 27px; height: 34px; }
+  .pc .fg { height: 38px; }
+  .pc.tie::before { --tie-top: 40px; }
   .bar { padding: 0 3px; }
   .sec { padding: 10px 8px 12px; }
   .ctrls { gap: 6px 10px; }
@@ -221,7 +232,7 @@ body.folded .wrap { padding-top: 0; }
   .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
   .now .curbox { min-width: 84px; }
   .now .lines { padding-left: 8px; }
-  .now .cur svg { width: 46px; height: 58px; }
+  .now .cur svg { width: 56px; height: 70px; }
   .now .nx svg { width: 24px; height: 30px; }
   .now .curname { font-size: 24px; }
   .sk { height: 30px; min-width: 34px; padding: 0 6px; }
@@ -248,14 +259,14 @@ body.folded .wrap { padding-top: 0; }
   .marks button span { display: none; }
   .ctrls { margin-top: 4px; gap: 4px 8px; font-size: 12px; }
   .now { margin-top: 6px; height: 118px; min-height: 0; padding: 6px 8px; gap: 8px; }
-  .now .cur svg { width: 44px; height: 55px; }
+  .now .cur svg { width: 52px; height: 65px; }
   .now .nx svg { width: 24px; height: 30px; }
   .now .curname { font-size: 22px; }
   .tabs { margin: 6px 0; }
   .tabs button { padding: 3px 10px; font-size: 13px; }
-  .pc .fg svg { width: 20px; height: 25px; }
-  .pc .fg { height: 30px; }
-  .pc.tie::before { --tie-top: 32px; }
+  .pc .fg svg { width: 27px; height: 34px; }
+  .pc .fg { height: 38px; }
+  .pc.tie::before { --tie-top: 40px; }
   .pc .dg { font-size: 20px; }
   .sec { scroll-margin-top: 240px; padding: 8px 8px 10px; }
 }
@@ -306,6 +317,7 @@ body.folded .wrap { padding-top: 0; }
           <span class="time" id="tTot">4:55</span>
         </div>
       </div>
+      <div class="qsec" id="qsec" aria-label="段落快速跳转"></div>
       <div class="row ctrls">
         <label>音轨 <select id="track"></select></label>
         <span class="seg" id="partSeg" role="group" aria-label="看哪个声部">
