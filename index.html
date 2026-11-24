@@ -301,6 +301,7 @@ body.folded .wrap { padding-top: 0; }
 </head>
 <body>
 <div id="gate" style="position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px">
+  <p id="gateLoading" role="status" hidden style="margin:0;color:var(--muted);font-size:14px;text-align:center">正在自动解锁…</p>
   <form id="gateForm" style="background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px 20px;width:100%;max-width:360px">
     <h2 style="margin:0 0 6px;font-size:20px">练习页</h2>
     <p style="margin:0 0 14px;color:var(--muted);font-size:13px">内容已加密，请输入密码</p>
@@ -406,9 +407,27 @@ body.folded .wrap { padding-top: 0; }
 <script>
 (async () => {
   const gate = document.getElementById('gate'), inp = document.getElementById('gatePw');
+  const form = document.getElementById('gateForm'), loading = document.getElementById('gateLoading');
   const msg = document.getElementById('gateMsg'), rem = document.getElementById('gateRemember');
-  if (!(window.crypto && crypto.subtle)) { msg.textContent = '这个浏览器不支持解密，请用 Safari / Chrome 打开 https 网址'; return; }
-  const meta = await (await fetch('meta.json', { cache: 'no-store' })).json();
+  let saved = null; try { saved = localStorage.getItem('ocarina-pw'); } catch (e) {}
+  if (saved) { form.hidden = true; loading.hidden = false; }
+  if (!(window.crypto && crypto.subtle)) {
+    form.hidden = true; loading.hidden = false;
+    loading.textContent = '这个浏览器不支持解密，请用 Safari / Chrome 打开 https 网址';
+    return;
+  }
+  let meta;
+  try {
+    const r = await fetch('meta.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    meta = await r.json();
+  } catch (e) {
+    form.hidden = true; loading.hidden = false;
+    loading.textContent = saved
+      ? '暂时无法连接，已保存密码；网络恢复后刷新页面即可。'
+      : '暂时无法连接；网络恢复后刷新页面即可。';
+    return;
+  }
   const salt = Uint8Array.from(atob(meta.salt), c => c.charCodeAt(0));
   let key = null;
   const norm = s => s.trim().toLowerCase().replace(/\s+/g, '');
@@ -428,10 +447,12 @@ body.folded .wrap { padding-top: 0; }
     return new Blob([await dec(await r.arrayBuffer())], { type: TYPES[file.split('.').pop()] || 'application/octet-stream' });
   };
   async function unlock(pw, auto) {
-    msg.style.color = 'var(--muted)'; msg.textContent = '解锁中…';
+    if (auto) { form.hidden = true; loading.hidden = false; loading.textContent = '正在自动解锁…'; }
+    else { msg.style.color = 'var(--muted)'; msg.textContent = '解锁中…'; }
     try {
       key = await derive(pw);
       const r = await fetch('app.bin', { cache: 'no-store' });
+      if (!r.ok) { const error = new Error('HTTP ' + r.status); error.network = true; throw error; }
       const p = JSON.parse(new TextDecoder().decode(await dec(await r.arrayBuffer())));
       try { if (rem.checked || auto) localStorage.setItem('ocarina-pw', pw); else localStorage.removeItem('ocarina-pw'); } catch (e) {}
       gate.remove();
@@ -439,12 +460,16 @@ body.folded .wrap { padding-top: 0; }
       for (const code of [p.lyrics, p.app]) { const s = document.createElement('script'); s.textContent = code; document.body.appendChild(s); }
     } catch (e) {
       key = null; msg.style.color = '#c0392b';
-      msg.textContent = auto ? '' : '密码不对，请再试一次';
-      if (auto) { try { localStorage.removeItem('ocarina-pw'); } catch (e2) {} }
+      if (e.network || e.name === 'TypeError') {
+        if (auto) { loading.hidden = false; loading.textContent = '暂时无法连接，已保存密码；网络恢复后刷新页面即可。'; }
+        else msg.textContent = '暂时无法连接，请检查网络后重试';
+      } else if (auto) {
+        loading.hidden = true; form.hidden = false; rem.checked = true;
+        inp.value = ''; msg.textContent = '自动解锁失败，请重新输入密码'; inp.focus();
+      } else msg.textContent = '密码不对，请再试一次';
     }
   }
-  document.getElementById('gateForm').addEventListener('submit', e => { e.preventDefault(); unlock(norm(inp.value), false); });
-  let saved = null; try { saved = localStorage.getItem('ocarina-pw'); } catch (e) {}
+  form.addEventListener('submit', e => { e.preventDefault(); unlock(norm(inp.value), false); });
   if (saved) unlock(saved, true); else inp.focus();
 })();
 </script>
