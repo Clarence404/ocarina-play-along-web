@@ -231,9 +231,11 @@ body.folded .wrap { padding-top: 0; }
   .player { padding: 8px 10px; }
   .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
   .now .curbox { min-width: 64px; }
-  .navbox .navhint { display: none; }      /* 手机上折叠标题只留「选项 · 页面：xx」，和「速度」放在同一行 */
+  .navbox .navhint, .navbox #navSum, .navbox .navdot { display: none; }   /* 手机上折叠标题只留「选项」，和音轨、速度放在同一行 */
   .navbox:not([open]) { white-space: nowrap; }
-  .ctrls select#track { width: 124px; }    /* 音轨下拉收窄：「音轨 + 看陶笛/看口琴」一行，「速度 + 选项」一行 */
+  .ctrls select#track { width: 112px; }    /* 音轨、速度、选项 一行放下 */
+  .ctrls select#rate { width: 64px; }
+  .ctrls { gap: 6px 8px; }
   .seg button { padding: 5px 9px; }
   .now .lines { padding-left: 8px; }
   .now .cur svg { width: 56px; height: 70px; }
@@ -324,15 +326,15 @@ body.folded .wrap { padding-top: 0; }
       </div>
       <div class="row ctrls">
         <label>音轨 <select id="track"></select></label>
-        <span class="seg" id="partSeg" role="group" aria-label="看哪个声部">
-          <button data-part="oca" class="on">看陶笛</button><button data-part="mel">看口琴</button>
-        </span>
         <label>速度 <select id="rate">
           <option value="0.6">0.6×</option><option value="0.75">0.75×</option><option value="0.85">0.85×</option><option value="1" selected>1.0×</option>
         </select></label>
         <details class="navbox" id="navbox">
-          <summary>选项 · <span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
+          <summary>选项<span class="navdot"> · </span><span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
           <div class="optrow">
+            <span class="seg" id="partSeg" role="group" aria-label="看哪个声部">
+              <button data-part="oca" class="on">看陶笛</button><button data-part="mel">看口琴</button>
+            </span>
             <label><input type="checkbox" id="loop"> 循环本段</label>
             <label><input type="checkbox" id="follow" checked> 自动翻谱</label>
             <label><input type="checkbox" id="fing" checked> 音符上显示指法</label>
