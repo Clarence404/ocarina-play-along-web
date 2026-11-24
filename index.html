@@ -110,10 +110,15 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .kbd { display: block; }
 
 /* tabs */
-.tabs { display: flex; gap: 6px; margin: 14px 0 10px; flex-wrap: wrap; }
+#tab-chart, #tab-pages { margin-top: 12px; }
+.navbox { margin-top: 8px; border-top: 1px dashed var(--line); padding-top: 6px; }
+.navbox summary { cursor: pointer; font-size: 13px; color: var(--ink); list-style-position: inside; }
+.navbox summary .navhint { color: var(--muted); }
+.navbox[open] summary { margin-bottom: 6px; }
+.tabs { display: flex; gap: 6px; margin: 4px 0 8px; flex-wrap: wrap; }
 .tabs button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 .tabs button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
 .chips button { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
 .chips button.cur { border-color: var(--accent); background: var(--accent-soft); }
 
@@ -324,6 +329,15 @@ body.folded .wrap { padding-top: 0; }
         <label><input type="checkbox" id="ghost" checked> 显示另一声部</label>
         </details>
       </div>
+      <details class="navbox" id="navbox">
+        <summary><span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
+        <nav class="tabs" id="tabs">
+          <button data-tab="score" class="on">跟随谱</button>
+          <button data-tab="chart">指法表</button>
+          <button data-tab="pages">原谱（PDF）</button>
+        </nav>
+        <div class="chips" id="chips"></div>
+      </details>
       <div id="errBox" class="err hidden"></div>
     </div>
     <div class="now" id="now">
@@ -334,14 +348,7 @@ body.folded .wrap { padding-top: 0; }
     </div>
   </div>
 
-  <nav class="tabs" id="tabs">
-    <button data-tab="score" class="on">跟随谱</button>
-    <button data-tab="chart">指法表</button>
-    <button data-tab="pages">原谱（PDF）</button>
-  </nav>
-
-  <section id="tab-score">
-    <div class="chips" id="chips"></div>
+  <section id="tab-score" style="margin-top:12px">
     <div id="score"></div>
   </section>
 
