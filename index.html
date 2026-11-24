@@ -132,7 +132,8 @@ body.has-ly .pc .ly { display: block; }
 .bar .bn { font-size: 10px; color: var(--muted); height: 12px; }
 .vgrid { display: grid; column-gap: 0; row-gap: 4px; justify-content: start; }
 /* 每拍分成 24 个小格，音符按它在这一拍里的实际起点放进对应的格：两个声部同一时刻的音上下对齐（和纸谱一样） */
-.vgrid .pc.bs:not(.b0) { margin-left: 6px; }   /* 每拍开头留一点间隔，拍和拍分得清 */
+.vgrid .pc.bs:not(.b0) { margin-left: 6px; }
+.vl.ref .pc { color: var(--muted); }   /* 前奏、间奏：伴奏旋律，只看不吹 */   /* 每拍开头留一点间隔，拍和拍分得清 */
 .vl { display: contents; }   /* 声部只是逻辑分组，实际排进 .vgrid 的同一张网格 */
 .vl .who { display: none; }
 .beat { display: flex; align-items: stretch; min-width: 0; }
