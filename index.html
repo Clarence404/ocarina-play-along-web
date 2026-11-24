@@ -227,6 +227,10 @@ body.folded .wrap { padding-top: 0; }
   .player { padding: 8px 10px; }
   .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
   .now .curbox { min-width: 64px; }
+  .navbox .navhint { display: none; }      /* 手机上折叠标题只留「选项 · 页面：xx」，和「速度」放在同一行 */
+  .navbox:not([open]) { white-space: nowrap; }
+  .ctrls select#track { width: 124px; }    /* 音轨下拉收窄：「音轨 + 看陶笛/看口琴」一行，「速度 + 选项」一行 */
+  .seg button { padding: 5px 9px; }
   .now .lines { padding-left: 8px; }
   .now .cur svg { width: 56px; height: 70px; }
   .now .nx svg { width: 24px; height: 30px; }
