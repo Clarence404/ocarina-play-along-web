@@ -230,6 +230,16 @@ body.folded .wrap { padding-top: 0; }
 .bar { max-width: 100%; }
 .sec { overflow-x: auto; }
 @media (max-width: 640px) {
+  .player-head { flex-wrap: nowrap; column-gap: 4px; }
+  .player-head .tp { gap: 3px; }
+  .player-head .tp .sk { min-width: 30px; padding: 0 3px; font-size: 12px; }
+  .player-actions { gap: 4px; }
+  .player-actions .sk { min-width: 30px; padding: 0 4px; }
+  .player-actions .repeat-label { gap: 4px; font-size: 12px; }
+  .player-actions .repeat-label input { width: 30px; }
+  .player-actions .repeat-label input:checked::before { transform: translateX(12px); }
+  .player-actions #fsBtn { min-width: 30px; padding: 0 3px; font-size: 0; }
+  .player-actions #fsBtn::before { content: '⛶'; font-size: 14px; }
   .beat { min-width: 30px; }
   .vl.ghost .beat { min-width: 24px; }
   .vl.prim:not(.nofing) .pc { min-width: 28px; }
