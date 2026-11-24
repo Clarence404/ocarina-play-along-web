@@ -121,9 +121,9 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 
 /* tabs */
 #tab-chart, #tab-pages { margin-top: 12px; }
-.navbox { margin: 0; }
-.navbox[open] { flex-basis: 100%; border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 2px; }
-.navbox summary { cursor: pointer; font-size: 13px; color: var(--ink); list-style-position: inside; }
+.navbox { margin: 0 0 0 auto; align-self: center; }   /* 收起时靠这一行的最右边，和左边的音轨/速度两端对齐 */
+.navbox[open] { flex-basis: 100%; margin-left: 0; border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 2px; }
+.navbox summary { cursor: pointer; font-size: 13px; line-height: 30px; color: var(--ink); list-style-position: inside; }
 .navbox summary .navhint { color: var(--muted); }
 .navbox[open] summary { margin-bottom: 6px; }
 .optrow { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; margin: 2px 0 4px; }
