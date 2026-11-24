@@ -67,6 +67,10 @@ header.top p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
   .marks { display: none; }
   .seek .track { padding-bottom: 0; }
 }
+/* 浏览器全屏时：去掉标题下面的说明行，页面更紧凑 */
+body.is-fs header.top p { display: none; }
+body.is-fs header.top { padding-top: 8px; }
+:root:fullscreen, html:-webkit-full-screen { background: var(--bg); overflow-y: auto; }
 .tp { display: inline-flex; align-items: center; gap: 6px; flex: none; }
 .sk { border: 1px solid var(--line); background: var(--card); border-radius: 999px; height: 34px; min-width: 40px; padding: 0 8px; cursor: pointer; font-size: 13px; }
 .sk:hover { border-color: var(--accent); }
@@ -306,6 +310,7 @@ body.folded .wrap { padding-top: 0; }
           <button class="sk" id="fwd5" title="快进 5 秒（键盘 →）">+5s</button>
           <button class="sk" id="nextSec" title="下一段">⏭</button>
           <button class="sk fold" id="foldBtn" title="收起播放器、选项和标签，只留一条">收起 ▲</button>
+          <button class="sk" id="fsBtn" title="浏览器全屏（键盘 F；Esc 退出）" hidden>⛶ 全屏</button>
         </span>
         <div class="seek">
           <span class="time" id="tCur">0:00</span>
