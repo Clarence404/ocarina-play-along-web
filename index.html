@@ -115,6 +115,8 @@ body:not(.has-ly) .now .nx .nly { display: none; }
 .navbox summary { cursor: pointer; font-size: 13px; color: var(--ink); list-style-position: inside; }
 .navbox summary .navhint { color: var(--muted); }
 .navbox[open] summary { margin-bottom: 6px; }
+.optrow { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; margin: 2px 0 4px; }
+.optrow label { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
 .tabs { display: flex; gap: 6px; margin: 4px 0 8px; flex-wrap: wrap; }
 .tabs button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 .tabs button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
@@ -202,8 +204,6 @@ body.folded .now .nx svg { width: 24px; height: 30px; }
 body.folded .now .curname { font-size: 24px; }
 body.folded .sec { scroll-margin-top: 100px; }
 body.folded .wrap { padding-top: 0; }
-.opts { display: contents; }
-.opts summary { display: none; }
 .bars { min-width: 0; }
 .bar { max-width: 100%; }
 .sec { overflow-x: auto; }
@@ -217,10 +217,6 @@ body.folded .wrap { padding-top: 0; }
   .bar { padding: 0 3px; }
   .sec { padding: 10px 8px 12px; }
   .ctrls { gap: 6px 10px; }
-  .opts { display: block; flex-basis: 100%; }
-  .opts summary { display: list-item; cursor: pointer; color: var(--muted); }
-  .opts[open] { display: flex; flex-wrap: wrap; gap: 6px 12px; }
-  .opts[open] summary { flex-basis: 100%; }
   .player { padding: 8px 10px; }
   .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
   .now .curbox { min-width: 84px; }
@@ -251,10 +247,6 @@ body.folded .wrap { padding-top: 0; }
   .seg button { padding: 3px 8px; }
   .marks button span { display: none; }
   .ctrls { margin-top: 4px; gap: 4px 8px; font-size: 12px; }
-  .opts { display: block; flex-basis: 100%; }
-  .opts summary { display: list-item; cursor: pointer; color: var(--muted); }
-  .opts[open] { display: flex; flex-wrap: wrap; gap: 4px 10px; }
-  .opts[open] summary { flex-basis: 100%; }
   .now { margin-top: 6px; height: 118px; min-height: 0; padding: 6px 8px; gap: 8px; }
   .now .cur svg { width: 44px; height: 55px; }
   .now .nx svg { width: 24px; height: 30px; }
@@ -322,15 +314,15 @@ body.folded .wrap { padding-top: 0; }
         <label>速度 <select id="rate">
           <option value="0.6">0.6×</option><option value="0.75">0.75×</option><option value="0.85">0.85×</option><option value="1" selected>1.0×</option>
         </select></label>
-        <details class="opts" id="opts" open><summary>选项</summary>
-        <label><input type="checkbox" id="loop"> 循环本段</label>
-        <label><input type="checkbox" id="follow" checked> 自动翻谱</label>
-        <label><input type="checkbox" id="fing" checked> 音符上显示指法</label>
-        <label><input type="checkbox" id="ghost" checked> 显示另一声部</label>
-        </details>
       </div>
       <details class="navbox" id="navbox">
-        <summary><span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
+        <summary>选项 · <span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
+        <div class="optrow">
+          <label><input type="checkbox" id="loop"> 循环本段</label>
+          <label><input type="checkbox" id="follow" checked> 自动翻谱</label>
+          <label><input type="checkbox" id="fing" checked> 音符上显示指法</label>
+          <label><input type="checkbox" id="ghost" checked> 显示另一声部</label>
+        </div>
         <nav class="tabs" id="tabs">
           <button data-tab="score" class="on">跟随谱</button>
           <button data-tab="chart">指法表</button>
