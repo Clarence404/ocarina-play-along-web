@@ -82,12 +82,12 @@ header.top p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 /* now strip */
 .now { margin-top: 8px; display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; box-shadow: var(--shadow); height: 196px; overflow: hidden; }
 /* 高度固定：在"音符/休止"之间切换时不会把下面的谱子顶上顶下 */
-.now .cur { display: flex; align-items: center; gap: 10px; flex: none; }
-.now .curname { font-size: 34px; font-weight: 700; line-height: 1; min-width: 44px; text-align: center; position: relative; }
+.now .cur { display: flex; align-items: center; gap: 6px; flex: none; }
+.now .curname { font-size: 34px; font-weight: 700; line-height: 1; min-width: 34px; text-align: center; position: relative; }
 .now .curname small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 6px; }
 /* 右边两行：上 = 当前行（带指法、高亮走动），下 = 下一行（小字、淡色） */
-.now .curbox { flex: none; display: flex; align-items: center; min-width: 110px; }
-.now .lines { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 4px; overflow: hidden; border-left: 1px solid var(--line); padding-left: 12px; }
+.now .curbox { flex: none; display: flex; align-items: center; min-width: 72px; max-width: 120px; }
+.now .lines { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 4px; overflow: hidden; border-left: 1px solid var(--line); padding-left: 8px; }
 .now .lrow { display: flex; gap: 6px; align-items: flex-end; overflow: hidden; white-space: nowrap; }
 .now .lrow.next { opacity: .5; font-size: 12px; min-height: 22px; }
 .now .lrow.next .nfg { display: none; }
@@ -111,13 +111,14 @@ header.top p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 body.has-ly .pc .ly { display: block; }
 .vl.ghost .pc .ly { font-size: 12px; height: 16px; line-height: 16px; }
 body:not(.has-ly) .now .nx .nly { display: none; }
-.now .msg { color: var(--muted); font-size: 14px; }
-.now .msg b { color: var(--ink); font-size: 22px; }
+.now .msg { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.now .msg b { color: var(--ink); font-size: 20px; }
 .kbd { display: block; }
 
 /* tabs */
 #tab-chart, #tab-pages { margin-top: 12px; }
-.navbox { margin-top: 8px; border-top: 1px dashed var(--line); padding-top: 6px; }
+.navbox { margin: 0; }
+.navbox[open] { flex-basis: 100%; border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 2px; }
 .navbox summary { cursor: pointer; font-size: 13px; color: var(--ink); list-style-position: inside; }
 .navbox summary .navhint { color: var(--muted); }
 .navbox[open] summary { margin-bottom: 6px; }
@@ -225,7 +226,7 @@ body.folded .wrap { padding-top: 0; }
   .ctrls { gap: 6px 10px; }
   .player { padding: 8px 10px; }
   .now { height: 150px; padding: 6px 8px; margin-top: 6px; gap: 8px; }
-  .now .curbox { min-width: 84px; }
+  .now .curbox { min-width: 64px; }
   .now .lines { padding-left: 8px; }
   .now .cur svg { width: 56px; height: 70px; }
   .now .nx svg { width: 24px; height: 30px; }
@@ -320,22 +321,22 @@ body.folded .wrap { padding-top: 0; }
         <label>速度 <select id="rate">
           <option value="0.6">0.6×</option><option value="0.75">0.75×</option><option value="0.85">0.85×</option><option value="1" selected>1.0×</option>
         </select></label>
+        <details class="navbox" id="navbox">
+          <summary>选项 · <span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
+          <div class="optrow">
+            <label><input type="checkbox" id="loop"> 循环本段</label>
+            <label><input type="checkbox" id="follow" checked> 自动翻谱</label>
+            <label><input type="checkbox" id="fing" checked> 音符上显示指法</label>
+            <label><input type="checkbox" id="ghost" checked> 显示另一声部</label>
+          </div>
+          <nav class="tabs" id="tabs">
+            <button data-tab="score" class="on">跟随谱</button>
+            <button data-tab="chart">指法表</button>
+            <button data-tab="pages">原谱（PDF）</button>
+          </nav>
+          <div class="chips" id="chips"></div>
+        </details>
       </div>
-      <details class="navbox" id="navbox">
-        <summary>选项 · <span id="navSum">页面：跟随谱</span><span class="navhint"> · 指法表 / 原谱 / 段落跳转</span></summary>
-        <div class="optrow">
-          <label><input type="checkbox" id="loop"> 循环本段</label>
-          <label><input type="checkbox" id="follow" checked> 自动翻谱</label>
-          <label><input type="checkbox" id="fing" checked> 音符上显示指法</label>
-          <label><input type="checkbox" id="ghost" checked> 显示另一声部</label>
-        </div>
-        <nav class="tabs" id="tabs">
-          <button data-tab="score" class="on">跟随谱</button>
-          <button data-tab="chart">指法表</button>
-          <button data-tab="pages">原谱（PDF）</button>
-        </nav>
-        <div class="chips" id="chips"></div>
-      </details>
       <div id="errBox" class="err hidden"></div>
     </div>
     <div class="now" id="now">
