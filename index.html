@@ -109,6 +109,10 @@ body.has-ly .pc .ly { display: block; }
 .navbox { flex-basis: 100%; min-width: 0; border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 2px; }
 .optrow { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; margin: 2px 0 4px; }
 .optrow label { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.optrow .sync { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.optrow .sync button { font: inherit; font-size: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 8px; padding: 3px 8px; cursor: pointer; }
+.optrow .sync b { min-width: 52px; text-align: center; font-variant-numeric: tabular-nums; }
+.optrow .sync small { color: var(--muted); font-size: 11px; }
 .tabs { display: flex; gap: 6px; margin: 4px 0 8px; flex-wrap: wrap; }
 .tabs button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 .tabs button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
@@ -349,6 +353,9 @@ body.folded .wrap { padding-top: 0; }
             <label><input type="checkbox" id="follow" checked> 自动翻谱</label>
             <label><input type="checkbox" id="fing" checked> 音符上显示指法</label>
             <label><input type="checkbox" id="ghost" checked> 显示另一声部</label>
+            <span class="sync" title="高亮比声音快/慢时调这里（每台设备、换蓝牙耳机后可能不一样，会记在这台设备上）">高亮同步
+              <button type="button" id="syncSlow">高亮慢一点</button><b id="syncVal">0</b><button type="button" id="syncFast">快一点</button>
+              <small id="syncInfo"></small></span>
           </div>
           <nav class="tabs" id="tabs">
             <button data-tab="score" class="on">跟随谱</button>
