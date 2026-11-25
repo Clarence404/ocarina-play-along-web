@@ -101,6 +101,7 @@ body.has-ly .pc .ly { display: block; }
 
 /* tabs */
 #tab-chart, #tab-pages { margin-top: 12px; }
+#scoreTail { height: 0; }
 /* 「选项」按钮一直在这一行的最右边（展开前后位置不变），展开的内容另起一整行放在下面 */
 .navbtn { margin-left: auto; align-self: center; border: 0; background: none; padding: 0 2px; cursor: pointer; font: inherit; font-size: 13px; line-height: 30px; color: var(--ink); white-space: nowrap; }
 .navbtn .navhint { color: var(--muted); }
@@ -381,6 +382,7 @@ body.folded .wrap { padding-top: 0; }
 
   <section id="tab-score" style="margin-top:12px">
     <div id="score"></div>
+    <div id="scoreTail" aria-hidden="true"></div>
   </section>
 
   <section id="tab-chart" class="hidden">
