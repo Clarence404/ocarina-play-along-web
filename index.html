@@ -143,16 +143,12 @@ body.has-ly .pc .ly { display: block; }
 .vl .who { display: none; }
 .beat { display: flex; align-items: stretch; min-width: 0; }
 .vl.ghost .beat { min-width: 0; }
-.pc { min-width: 16px; }
-.vl.prim:not(.nofing) .pc { min-width: 32px; }
+.pc:not(.ext) { width: 26px; min-width: 26px; box-sizing: border-box; }   /* 所有声部的音符统一占一格 */
 .pc.ext { min-width: 14px; }   /* 延长线「–」、附点「·」不需要和音符一样宽 */
 .pmark { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 2px 0 10px; }
 .pmark::before, .pmark::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
 .sec .pmark { margin: 0; }
-.pc { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: 6px; padding: 2px 1px 3px; position: relative; }
-/* 有歌词时每个音至少容得下一个汉字，短音（十六分音符）的字不会叠在一起；带指法的那一行本来就更宽 */
-body.has-ly .vl.nofing .pc { min-width: 19px; }
-body.has-ly .vl.ghost .pc { min-width: 15px; }
+.pc { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: 6px; padding: 2px 0 3px; position: relative; }
 .pc .fg { height: 44px; display: flex; align-items: flex-end; justify-content: center; }
 .vl.nofing .pc .fg, .vl.ghost .pc .fg { display: none; }
 .pc .hd { height: 9px; font-size: 14px; line-height: 6px; text-align: center; }
@@ -232,12 +228,10 @@ body.folded .wrap { padding-top: 0; }
   .player-actions #fsBtn { min-width: 30px; padding: 0 3px; font-size: 0; }
   .player-actions #fsBtn::before { content: '⛶'; font-size: 14px; }
   /* 手机：紧凑排版，让纸谱一行（约 14 个音）尽量放进一行 */
-  .vl.prim:not(.nofing) .pc { min-width: 23px; }
-  .pc { padding: 2px 0 3px; }
+  .pc:not(.ext) { width: 23px; min-width: 23px; }
   .pc .fg svg { width: 23px; height: 29px; }
   .pc .fg { height: 32px; }
   .bar { padding: 0 2px; }
-  .vgrid { column-gap: 1px; }
   .wrap { padding-left: 10px; padding-right: 10px; }
   .sec { padding: 10px 6px 12px; }
   .ctrls { gap: 6px 10px; }
@@ -255,8 +249,8 @@ body.folded .wrap { padding-top: 0; }
 }
 /* 小屏 iPhone（≤400px 宽，如 mini / SE / 12~15 标准版）：图标再小一点点，纸谱一行仍能放进一行 */
 @media (max-width: 400px) {
-  .vl.prim:not(.nofing) .pc { min-width: 21px; }
-  .pc .fg svg { width: 21px; height: 26px; }
+  .pc:not(.ext) { width: 23px; min-width: 23px; }
+  .pc .fg svg { width: 23px; height: 29px; }
   .pc .fg { height: 29px; }
   .pc .dg { font-size: 19px; }
   .wrap { padding-left: 8px; padding-right: 8px; }
