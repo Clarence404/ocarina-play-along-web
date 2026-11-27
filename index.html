@@ -133,7 +133,7 @@ body.has-ly .pc .ly { display: block; }
 .sechead .go { margin-left: auto; border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 3px 10px; cursor: pointer; font-size: 13px; }
 .bars { display: flex; flex-wrap: wrap; row-gap: 14px; padding-left: 2px; }   /* 小节一个接一个往右排，排不下才折行 */
 .prow { display: contents; }
-.bars > .pmark { flex-basis: 100%; }   /* 「纸谱第 N 页」单独占一整行 */
+.bar .bn .pg { margin-left: 6px; color: var(--accent); white-space: nowrap; }   /* 段落中间换纸谱页：写在小节号旁边，不打断排版（放得下就接着往右排） */
 .bar { flex: 0 0 auto; border-left: 2px solid var(--line); border-right: 2px solid var(--line); margin-left: -2px; padding: 0 5px; display: flex; flex-direction: column; gap: 4px; }   /* 紧凑：按内容的自然宽度；左右都有小节线，相邻的叠在一起，每行开头也有线 */
 .bar .bn { font-size: 10px; color: var(--muted); height: 12px; }
 .vgrid { display: grid; column-gap: 0; row-gap: 4px; justify-content: start; }
