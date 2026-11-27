@@ -3,14 +3,14 @@
  "iter": 250000,
  "check": "6f99c4465a5ee7086bc09506f8bc9b4996bb075529c6c84d691ecdd876d58d1c",
  "files": {
-  "app.bin": "ef111c25dd550181bcb93df0c39d16c2",
+  "app.bin": "717dbc574d1d08694983b3e8835d6c0a",
   "songs/meili-shenhua/audio/ocarina_with_backing.mp3.bin": "60e4b982f0f83937ab1c8f5258f1aa64",
   "songs/meili-shenhua/audio/harmonica_with_backing.mp3.bin": "543d6e7b118cb20968c46e7c941d0e06",
   "songs/meili-shenhua/audio/duet_with_backing.mp3.bin": "fd19a44ba07e55ebda761c10bab0daca",
   "songs/meili-shenhua/audio/backing.mp3.bin": "e4301f66b1cb985266aaad6206d59e95",
   "songs/meili-shenhua/audio/ocarina_solo.mp3.bin": "13a63b151794ed8fbd5cd6a63158e7b4",
   "songs/meili-shenhua/audio/harmonica_solo.mp3.bin": "667e68832cf61c603bcbc4cf5324ae9b",
-  "songs/meili-shenhua/scores/陶笛指法谱_竖版4页.pdf.bin": "695c37937b955888ad9a9797474b167f",
-  "songs/meili-shenhua/scores/陶笛指法谱_横版2页.pdf.bin": "cf2d8ba3eb31fa9c8c677bae8085e5ee"
+  "songs/meili-shenhua/scores/陶笛指法谱_竖版4页.pdf.bin": "28a45634ce9bf713f9af0c9bbdff01a5",
+  "songs/meili-shenhua/scores/陶笛指法谱_横版2页.pdf.bin": "873a30b5b9e3995846345100e165e29c"
  }
 }
